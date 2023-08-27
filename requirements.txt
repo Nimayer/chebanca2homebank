@@ -1,2 +1,2 @@
-polars>=0.15.13
+polars>=0.18.15
 xlsx2csv>=0.8.0

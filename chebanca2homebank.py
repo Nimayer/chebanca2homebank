@@ -78,7 +78,7 @@ df_hb = df_cb.select(
     [
         pl.col("Data valuta").alias("date"),
         pl.col("Tipologia").str.extract(chebanca_type_regex, 1)
-            .apply(lambda s: chebanca_types[s]).alias("payment"),
+            .map_dict(chebanca_types).alias("payment"),
         pl.col("Tipologia").str.extract(chebanca_type_regex, 2).alias("info"),
         pl.col("Tipologia").apply(search_payee).apply(lambda s: s.capitalize()).alias("payee"),
         pl.col("Tipologia").str.extract(chebanca_type_regex, 1).alias("memo"),
@@ -91,5 +91,5 @@ details_set = set(df_hb.select("memo")["memo"].to_list())
 print(f"Payment types found: {details_set}")
 print(f"HomeBank table \n{df_hb}")
 # HomeBank uses ; as separator
-df_hb.write_csv(output_file, sep=";")
+df_hb.write_csv(output_file, separator=";")
 print(f"HomeBank table written to {output_file}\n")
